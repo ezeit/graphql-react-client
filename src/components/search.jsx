@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import {BrowserRouter as Router, Route, Link} from 'react-router-dom'
 //import './App.css';
 import { createApolloFetch } from 'apollo-fetch';
+import Item from './item'
 
 class Search extends Component {
 
@@ -107,6 +109,7 @@ class Search extends Component {
 
   render() {
     return (
+      <Router>
       <div>
         <div className="Search">
           <form onSubmit={this.handleSubmit}>        
@@ -116,7 +119,8 @@ class Search extends Component {
         </div>
         <div className="Results">
           {this.state.sarchResult && this.state.sarchResult.items.map((item, i) => {                             
-            return <p id={item.id}>{item.title}</p>
+            return <p><a href="#" onClick={(e) => this.props.itemClick(item.id, e)} id={item.id}>{item.title}</a></p>
+            
           })}
         </div>
         <div className="Pages">
@@ -136,9 +140,12 @@ class Search extends Component {
             }
           })()}
         </div>
+        <Route path="/item/:id" render={(props) => <Item {...props} />} />
       </div>
+      </Router>
     );
   }
+  
 }
 
 export default Search;
