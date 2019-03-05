@@ -26,7 +26,6 @@ class ItemDescription extends Component {
     }
 
     render() {    
-        console.log("SADASDASD",this.state.description)
         return (
             <div className="Description">    
                 {this.state.description &&

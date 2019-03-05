@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import ItemDescription from './itemDescription'
 
 class Item extends Component {
-    constructor(props) {
-        console.log("1")
+    constructor(props) {        
         super(props)
 
         this.state = {
@@ -22,7 +21,6 @@ class Item extends Component {
             .then(function(json) {
                 return json
             });
-        console.log("data",data)
         this.setState({
             itemInfo : data
         })
