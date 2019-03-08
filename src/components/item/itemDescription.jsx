@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import './item.css'
 
 class ItemDescription extends Component {
     constructor(props) {        
@@ -27,10 +27,10 @@ class ItemDescription extends Component {
 
     render() {    
         return (
-            <div className="Description">    
+            <div className="description">    
                 {this.state.description &&
                     <div>   
-                        <h3>{this.state.description}</h3>
+                        <span>{this.state.description}</span>
                     </div>
                 }            
             </div>

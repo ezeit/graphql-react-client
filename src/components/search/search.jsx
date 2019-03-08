@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { createApolloFetch } from 'apollo-fetch';
 //import './App.css';
-import ListItems from '../containers/listItems'
-import Pagination from '../containers/pagination';
-//import { withRouter } from "react-router";
+import ListItems from '../../containers/item/listItems'
+import Pagination from '../../containers/pagination/pagination';
+
+import './search.css'
 
 class Search extends Component {
 
@@ -27,8 +28,7 @@ class Search extends Component {
 
     componentDidMount() {
             if (!this.state.value) {
-                const busquedasIniciales = [
-                    'Chromecast',
+                const busquedasIniciales = [                    
                     'Casa',
                     'Auto',
                     'Teclado',
@@ -104,6 +104,7 @@ class Search extends Component {
     `,
             variables: { query: query, first: 5, after: after, before: before },
         }).then(res => {
+            console.log("DATA",res)
             this.setState({
                 previousPage: res.data.search.pageInfo.endCursor,
                 searchResult: res.data.search.items,                
@@ -114,13 +115,12 @@ class Search extends Component {
 
     render() {
         return (
-            <div className="Search">
+            <div className="search">
 
-                <form onSubmit={this.handleSubmit}>
+                <form className="search-form" onSubmit={this.handleSubmit}>
                     <input type="text" value={this.state.value} onChange={this.handleChange} />
-                    <input type="submit" value="Buscar" />
-                </form>
-
+                    <input type="submit" value="" ></input>                    
+                </form>                
                 <ListItems items={this.state.searchResult} handleClick={() => { }} />
                 <Pagination currentPage={this.state.currentPage} nextPage={this.state.nextPage} handlePreviousPageClick={this.handlePreviousPageClick} handleNextPageClick={this.handleNextPageClick} />
             </div>

@@ -1,12 +1,17 @@
 import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom'
-import Item from '../components/item'
-import Search from '../components/search'
+import Header from '../header/header'
+import Item from '../../components/item/item'
+import Search from '../../components/search/search'
+import './home.css'
 
 const Home = (props) => (
     <Router>
-        <div>                    
-            <div>               
+        <div>
+            <header>
+                <Header></Header>
+            </header>                    
+            <div className="main">               
             <Route exact path="/" render={(props) => <Search {...props} />} />
                 <Route path="/item/:id" render={(props) => <Item {...props} />} />
             </div>

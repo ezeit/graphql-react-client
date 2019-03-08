@@ -1,0 +1,7 @@
+.ListItems{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    max-width: 900px;
+    padding-top: 50px;
+}

@@ -1,5 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom'
 import ItemInfo from './itemInfo'
+import './listItems.css'
 
 const ListItems = ({ items, handleClick }) => (
     <div

@@ -1,0 +1,17 @@
+.pages{
+    padding-left: 200px;
+}
+
+.page-prev{
+    position: fixed;    
+}
+
+.page-current{    
+    position: fixed;    
+    margin-left: 100px;
+}
+
+.page-next{
+    position: fixed;    
+    margin-left: 200px;
+}

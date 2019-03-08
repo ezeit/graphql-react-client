@@ -1,20 +1,21 @@
 import React from 'react';
+import './pagination.css'
 
 const Pagination = ({ currentPage, nextPage, handlePreviousPageClick, handleNextPageClick }) => (    
-    <div className="Pages">
+    <div className="pages">
         {(() => {
         if(currentPage > 1){
-            return <a href="#" onClick={handlePreviousPageClick}>Anterior</a>
+            return <a className="page-prev" href="#" onClick={handlePreviousPageClick}>&#60;</a>
         }
         })()}
         {(() => {
         if(currentPage > 0){
-            return <span>{currentPage}</span>
+            return <span className="page-current">[{currentPage}]</span>
         }
         })()}
         {(() => {
         if(currentPage > 0 && nextPage){
-            return <a href="#" onClick={handleNextPageClick}>Siguiente</a>
+            return <a className="page-next" href="#" onClick={handleNextPageClick}>&#62;</a>
         }
         })()}
     </div>                         
