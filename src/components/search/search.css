@@ -19,6 +19,10 @@
     font-size: large;
 }
 
+input[type="text"]:focus {
+    outline: none;
+}
+
 .search-form input[type="submit"] {
     margin-left: -42px;
     height: 32px;

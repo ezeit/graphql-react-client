@@ -39,7 +39,7 @@ class Item extends Component {
                             <div>
                                 <Carousel dynamicHeight={true} width="600px" showThumbs={false}>
                                     {this.state.itemInfo.pictures && this.state.itemInfo.pictures.map((picture) => {
-                                        return <div>
+                                        return <div id={picture.id}>
                                             <img src={picture.url}></img>
                                         </div>
                                     })}

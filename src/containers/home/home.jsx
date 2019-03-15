@@ -5,14 +5,15 @@ import Item from '../../components/item/item'
 import Search from '../../components/search/search'
 import './home.css'
 
-const Home = (props) => (
+const Home = (props) => (    
     <Router>
         <div>
             <header>
                 <Header></Header>
             </header>                    
             <div className="main">               
-            <Route exact path="/" render={(props) => <Search {...props} />} />
+                <Route exact path="/" render={(props) => <Search {...props} />} />
+                <Route path="/search/:query/:page?/:order?" render={(props) => <Search {...props} />} />
                 <Route path="/item/:id" render={(props) => <Item {...props} />} />
             </div>
         </div>

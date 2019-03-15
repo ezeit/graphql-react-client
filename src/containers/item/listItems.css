@@ -2,6 +2,24 @@
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
-    max-width: 900px;
-    padding-top: 50px;
+    max-width: 900px;    
+    padding-top: 25px;
+}
+
+.results{
+    padding-top: 25px;
+}
+
+.order{
+    border: 1px solid #BE81F7;
+    border-radius: 12px;
+    padding: 6px 6px 6px 6px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.order.active{
+    background-color: #d5abfc;
+    color: white;
+    font-weight: 500;
 }

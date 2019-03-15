@@ -3,15 +3,20 @@ import { Link } from 'react-router-dom'
 import ItemInfo from './itemInfo'
 import './listItems.css'
 
-const ListItems = ({ items, handleClick }) => (
-    <div
-       className='ListItems'
-       onClick={handleClick}
-       role="button">       
-        {items && items.map((item) => {                                  
-            return <ItemInfo item={item} handleClick={handleClick}></ItemInfo>
-          })}
+const ListItems = ({ items, order, currentPage, handleASCClick, handleDESCClick }) => (
+  <div className="results">
+    {currentPage > 0 &&
+      <div>
+      <span className={`order ${order !== 'DESC' ? 'active' : ''}`} onClick={handleASCClick}>Ascendente</span>
+      <span className={`order ${order === 'DESC' ? 'active' : ''}`} onClick={handleDESCClick}>Descendente</span>
     </div>
- );
+    }    
+    <div className='ListItems' role="button">
+      {items && items.map((item) => {
+        return <ItemInfo  item={item}></ItemInfo>
+      })}
+    </div>    
+  </div>
+);
 
- export default ListItems
+export default ListItems
