@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom'
 import ItemInfo from './itemInfo'
 import './listItems.css'
 
@@ -13,7 +12,7 @@ const ListItems = ({ items, order, currentPage, handleASCClick, handleDESCClick 
     }    
     <div className='ListItems' role="button">
       {items && items.map((item) => {
-        return <ItemInfo  item={item}></ItemInfo>
+        return <ItemInfo key={item.id}  item={item}></ItemInfo>
       })}
     </div>    
   </div>

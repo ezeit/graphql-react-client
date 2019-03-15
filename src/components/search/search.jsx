@@ -1,34 +1,34 @@
 import React, { Component } from 'react';
 import { createApolloFetch } from 'apollo-fetch';
-//import './App.css';
 import ListItems from '../../containers/item/listItems'
 import Pagination from '../../containers/pagination/pagination';
 
 import './search.css'
+
+
+const SearchTypes = Object.freeze({
+    RANDOM:   Symbol("random"),
+    SUBMIT:  Symbol("submit"),
+    NORMAL: Symbol("normal"),
+    NEXT: Symbol("next"),
+    PREV: Symbol("prev"),
+});
 
 class Search extends Component {
 
     constructor(props) {
         super(props)
 
-
-        const { query, order, page } = { ...this.props.match.params }
-        console.log("PROPS", query, order, page)
-
+        const { query, order, page } = { ...this.props.match.params }        
         this.state = {
             value: query || "",
-            searchResult: null,
-            searchItems: [],
             currentPage: parseInt(page) || -1,
-            nextPage: null,
-            previousPage: null,
-            order: order || 'ASC'
+            order: order || 'ASC',
+            searchResult: null
         }
     }
 
-    componentWillMount() {
-        console.log("SEARCH Component_WillMount")        
-
+    componentWillMount() {        
         if (!this.state.value) {
             const busquedasIniciales = [
                 'Casa',
@@ -39,47 +39,10 @@ class Search extends Component {
             ];
 
             var busqueda = busquedasIniciales[Math.floor(Math.random() * busquedasIniciales.length)];
-            this.search(busqueda);
-            this.setState({
-                currentPage: -1
-            })
+            this.handleSearch(SearchTypes.RANDOM, busqueda);
         } else {
-            this.search(this.state.value, this.state.currentPage, this.state.order);
-           this.setState({
-               currentPage: this.state.currentPage || 1
-           })
+            this.handleSearch(SearchTypes.NORMAL);
         }
-    }
-
-    handleSubmit = (event) => {
-        //event.preventDefault();
-        this.props.history.push(`/search/${this.state.value}/1/ASC`)
-        this.search(this.state.value,1, 'ASC')
-        
-    }
-
-    handleChange = (event) => {
-        this.setState({ value: event.target.value })
-    }
-
-    handlePreviousPageClick = (event) => {
-        //event.preventDefault();
-        const { currentPage } = this.state
-        console.log("handlePreviousPageClick", currentPage)
-        this.search(this.state.value, currentPage - 1, this.state.order)
-       this.setState({
-           currentPage: currentPage - 1
-       })
-    }
-
-    handleNextPageClick = (event) => {
-        //event.preventDefault();
-        const { currentPage } = this.state
-        console.log("handleNextPageClick", currentPage)
-        this.search(this.state.value, currentPage + 1, this.state.order)
-       this.setState({
-           currentPage: currentPage + 1
-       })
     }
 
     search = (query, page, order) => {
@@ -87,7 +50,7 @@ class Search extends Component {
             uri: "http://localhost:3500/graphql",
         });
 
-         fetch({
+        return fetch({
             query: `query SearchItems($query: String!, $page: Int, $order: String) {
                         search(query: $query, page:$page, order:$order) {
                         items{
@@ -110,43 +73,86 @@ class Search extends Component {
                         }
                     }
     `,
-            variables: { query: query, page: page, order:order },
-        })
-        .then(res => {
-           this.setState({
-               searchResult: res.data.search.items,
-               hasNextPage: res.data.search.pageInfo.hasNextPage
-           })
+            variables: { query: query, page: page, order: order },
         });
     }
 
-    handleASCClick = () => {
+    handleSearch = (type, query, order) => {
+        let searchInPage = 1;
+        let resultPage = 1;        
+        switch (type) {
+            case SearchTypes.RANDOM:
+                resultPage = -1;
+                break;
+            case SearchTypes.SUBMIT:
+                order = order || 'ASC'
+                break;
+            case SearchTypes.NORMAL:
+                searchInPage = resultPage = this.state.currentPage || 1
+                break;
+            case SearchTypes.NEXT:
+                searchInPage = resultPage = this.state.currentPage + 1
+                break;
+            case SearchTypes.PREV:
+                searchInPage = resultPage = this.state.currentPage - 1
+                break;
+            default:
+                break;
+        }
+
+        this.search(query || this.state.value, searchInPage, order || this.state.order)
+            .then(res => {                
+                this.setState({
+                    searchResult: res.data.search.items,
+                    hasNextPage: res.data.search.pageInfo.hasNextPage,
+                    currentPage: resultPage,
+                    order: order || this.state.order
+                })
+            })
+    }
+
+    handleASCClick = (event) => {
+        event.preventDefault();
         this.props.history.push(`/search/${this.state.value}/1/ASC`)
-        this.setState({
-            order: 'ASC',
-            currentPage: 1            
-        })
-        this.search(this.state.value,1, 'ASC')
+        this.handleSearch(SearchTypes.SUBMIT)
     }
 
-    handleDESCClick = () => {
+    handleDESCClick = (event) => {
+        event.preventDefault();
         this.props.history.push(`/search/${this.state.value}/1/DESC`)
-        this.setState({
-            order: 'DESC',
-            currentPage: 1            
-        })
-        this.search(this.state.value,1, 'DESC')
+        this.handleSearch(SearchTypes.SUBMIT,null,'DESC')
     }
 
-    render() {
-        console.log("SEARCH Component_Render")
+    handleSubmit = (event) => {
+        event.preventDefault();
+        this.props.history.push(`/search/${this.state.value}/1/ASC`)
+        this.handleSearch(SearchTypes.SUBMIT)
+    }
+
+    handleChange = (event) => {
+        this.setState({ value: event.target.value })
+    }
+
+    handlePreviousPageClick = (event) => {
+        event.preventDefault();        
+        this.props.history.push(`/search/${this.state.value}/${this.state.currentPage -1}/${this.state.order}`)
+        this.handleSearch(SearchTypes.PREV)        
+    }
+
+    handleNextPageClick = (event) => {
+        event.preventDefault();        
+        this.props.history.push(`/search/${this.state.value}/${this.state.currentPage +1}/${this.state.order}`)
+        this.handleSearch(SearchTypes.NEXT)        
+    }
+
+    render() {        
         return (
             <div className="search">
                 <form className="search-form" onSubmit={this.handleSubmit}>
-                    <input type="text" value={this.state.value} onChange={this.handleChange} />
+                    <input type="text" placeholder="Ingresá lo que quieras buscar" value={this.state.value} onChange={this.handleChange} />
                     <input type="submit" value="" ></input>
                 </form>
-                <ListItems items={this.state.searchResult} order={this.state.order} currentPage={this.state.currentPage} handleASCClick={this.handleASCClick}  handleDESCClick={this.handleDESCClick} />
+                <ListItems items={this.state.searchResult} order={this.state.order} currentPage={this.state.currentPage} handleASCClick={this.handleASCClick} handleDESCClick={this.handleDESCClick} />
                 <Pagination query={this.state.value} order={this.state.order} currentPage={this.state.currentPage} nextPage={this.state.hasNextPage} handlePreviousPageClick={this.handlePreviousPageClick} handleNextPageClick={this.handleNextPageClick} />
             </div>
         );

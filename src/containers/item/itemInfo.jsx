@@ -9,7 +9,7 @@ function Preloader(props) {
 }
 
 const ItemInfo = ({ item }) => (
-    <div className="item" id={`item_${item.id}`}>
+    <div className="item">
         <div className="item-img">
         <ImageLoader src={item.thumbnail}>            
             <img />
